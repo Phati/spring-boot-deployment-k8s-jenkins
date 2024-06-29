@@ -28,6 +28,8 @@ Create a Dockerfile as below:
     # Download and install kubectl  
     RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"  
     RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    
+    USER jenkins
 
 Build Docker image
 >docker image build -t custom-jenkins-docker:latest .
@@ -56,6 +58,11 @@ click on Available plugins
 search for kubernetes
 select ***Kubernetes, Kubernetes Credentials, Kubernetes CLI***
 click on install
+
+**Add credentials**
+Go to manage Jenkins click on credentials
+1. add dockerhub credentials with id : registry-pass
+2. add github creds with id : github-creds
 
 Now our Jenkins Master is ready.
 
