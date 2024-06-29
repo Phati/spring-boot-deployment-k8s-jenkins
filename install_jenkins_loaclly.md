@@ -1,4 +1,4 @@
-# 1. Set up Jenkins Server
+# 1. Set up Jenkins Server Locally
 
 We will run Jenkins in a docker container, we will also need docker running inside that docker container **(for building docker images from source code during containerize stage in pipeline)**,  we will install **kubectl**  and **helm** so that we can use those in jenkins pipelines.  We will create a custom Jenkins image from the Jenkins base Image and install docker during boot up.
 
@@ -37,12 +37,36 @@ Build Docker image
 Run docker container from custom Jenkins image
 >docker run -d -p 8080:8080 -p 50000:50000 --name jenkins -v //var/run/docker.sock:/var/run/docker.sock  -v jenkins_home:/var/jenkins_home custom-jenkins-docker:latest
 
-It will print the admin password with below statement
+**Check if you can do docker ps inside the container**
+
+> docker exec -it jenkins bash
+
+> docker ps
+
+if you get any error related to docker sock permission
+we need to give jenkins user permission to the docker sock on the host
+type below command
+
+> id
+
+copy the jenkins user id
+exit out of container typing
+
+> exit
+> 
+> sudo chown 1000:1000 /var/run/docker.sock
+
+now again exec into the container and check if you can execute docker commands
+
+***Login to jenkins UI from browser***
+Copy the admin password from container logs
+>docker logs -f jenkins
+
+Search for 
 >Jenkins initial setup is required. An admin user has been created and a password generated.
 Please use the following password to proceed to installation:
 
-Copy that password=>  you can get the password by checking the docker logs
->docker logs -f jenkins
+Copy that password.
 
 Now open **localhost:8080** in browser to configure Jenkins, enter the password.
 It will ask to install plugins, Install suggested plugins.
@@ -61,44 +85,7 @@ click on install
 
 **Add credentials**
 Go to manage Jenkins click on credentials
-1. add dockerhub credentials with id : registry-pass
-2. add github creds with id : github-creds
+1. add dockerhub credentials as (secret text) with id : registry-pass
+2. add github creds as (usename and password) with id : github-creds
 
 Now our Jenkins Master is ready.
-
-
-# 2. Create Source Code Repository
-
-Now we will create a sample-spring-boot-app and push it on Github.
-Additionally we will add below files to the project
-1. .env
-	
-2. Dockerfile
-	
-3. Jenkinsfile
-
-4.  Jenkins scripts
-
-**We will create another git repository for our Jenkins shared library code**
-
-This shared library has groovy scripts which are basically functions that can be called from a Jenkins pipeline that imports this shared library. This is a good way to reuse code in different pipeline scripts.
-
-> vars/loadEnv.groovy
-
-This function is called in the jenkins pipeline in the begining and it reads the .env file and splits it by new line and creates the environment variables in Jenkins to be used later during the pipeline execution
-
-    def call(){
-    echo "loading .env file"
-    def envFilePath = "${WORKSPACE}/.env"
-    if (fileExists(envFilePath)) {
-        def envContent = readFile(envFilePath).trim()
-        envContent.readLines().each { line ->
-        def (key, value) = line.split('=')
-        env."${key}" = value
-    }
-    } else {
-        echo "No .env file found"
-    }
-	}
-
-https://github.com/Phati/jenkins-shared-library
