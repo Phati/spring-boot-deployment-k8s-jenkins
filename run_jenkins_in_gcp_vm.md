@@ -1,27 +1,31 @@
-
 # 1. Install Jenkins on a VM in GCP
 
 1. Provision a Ubuntu VM on Google Cloud Compute Engine
-	Login to GCP console and navigate to **Compute Engine-> VM instances**
-	Click on **Create instance**
-	![enter image description here](https://i.postimg.cc/Mps6SmSH/Screenshot-2024-06-29-144633.png)
+Login to GCP console and navigate to **Compute Engine-> VM instances**
+Click on **Create instance**
+![enter image description here](https://i.postimg.cc/Mps6SmSH/Screenshot-2024-06-29-144633.png)
 	
-	Select Ubuntu as OS
-	![enter image description here](https://i.postimg.cc/RFt4wrnJ/Screenshot-2024-06-29-144600.png)
-2. Make sure to expose port 8080 and allow http, https traffic
+2. Select Ubuntu as OS
+![enter image description here](https://i.postimg.cc/RFt4wrnJ/Screenshot-2024-06-29-144600.png)
+
+3. Make sure to expose port 8080 and allow http, https traffic
 ![enter image description here](https://i.postimg.cc/QMHXxK8b/Screenshot-2024-06-29-144651.png)
 
 4. SSH into the VM and install below applications
 
- Install Jenkins
+ ***Install Jenkins***
  https://www.cherryservers.com/blog/how-to-install-jenkins-on-ubuntu-22-04
- Install Docker
+
+ ***Install Docker***
  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
- Install DockerCompose
+
+ ***Install DockerCompose***
  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04
- Install helm
+ 
+ ***Install helm***
  https://helm.sh/docs/intro/install/
- Install kubectl
+
+ ***Install kubectl***
  https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
  
 ***Login to jenkins UI from browser***
